@@ -34,6 +34,7 @@
 #include <linux/mfd/syscon.h>
 #include <linux/mfd/syscon/imx6q-iomuxc-gpr.h>
 #include <linux/of_net.h>
+#include <linux/delay.h>
 #include <asm/mach/arch.h>
 #include <asm/mach/map.h>
 #include <asm/system_misc.h>
@@ -41,6 +42,38 @@
 #include "common.h"
 #include "cpuidle.h"
 #include "hardware.h"
+
+/* Software Power Off */
+#define T66_SOFT_OFF		IMX_GPIO_NR(4, 14)
+
+/* last state */
+#define T66_LAST_STATE		IMX_GPIO_NR(1, 8)
+
+static void atrust_t66_cpld_pulse(int count)
+{
+	int i;
+	for(i = 0; i <=count; i++)
+	{
+		gpio_direction_output(T66_LAST_STATE, 1);
+		mdelay(20);
+		gpio_direction_output(T66_LAST_STATE, 0);
+		mdelay(20);
+	}
+}
+
+static void atrust_t66_power_off(void)
+{
+	gpio_direction_output(T66_SOFT_OFF, 1);
+	gpio_direction_output(T66_LAST_STATE, 1);
+	mdelay(20);
+	gpio_direction_output(T66_SOFT_OFF, 0);
+	mdelay(20);
+
+	/* turn off t66, you need send 3 pulse to CPLD */
+	atrust_t66_cpld_pulse(3);
+
+	gpio_set_value(T66_LAST_STATE, 1);
+}
 
 static struct flexcan_platform_data flexcan_pdata[2];
 static int flexcan_en_gpio;
@@ -320,6 +353,7 @@ static void __init imx6q_init_machine(void)
 	imx_anatop_init();
 	imx6_pm_init();
 	imx6q_csi_mux_init();
+	pm_power_off = atrust_t66_power_off;
 }
 
 #define OCOTP_CFG3			0x440
