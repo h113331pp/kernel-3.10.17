@@ -195,7 +195,9 @@ static int squashfs_fill_super(struct super_block *sb, void *data, int silent)
 		(u64) le64_to_cpu(sblk->id_table_start));
 
 	sb->s_maxbytes = MAX_LFS_FILESIZE;
-	sb->s_flags |= MS_RDONLY;
+	// our squashfs doesn`t need mount as read only.
+	// don`t forget to add kernel parameter "rw" to mount squashfs!!!
+	//sb->s_flags |= MS_RDONLY;
 	sb->s_op = &squashfs_super_ops;
 
 	err = -ENOMEM;
@@ -371,7 +373,8 @@ static int squashfs_statfs(struct dentry *dentry, struct kstatfs *buf)
 
 static int squashfs_remount(struct super_block *sb, int *flags, char *data)
 {
-	*flags |= MS_RDONLY;
+	// our squashfs doesn`t need remount as read only.
+	//*flags |= MS_RDONLY;
 	return 0;
 }
 
