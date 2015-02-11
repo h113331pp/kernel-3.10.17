@@ -15,5 +15,11 @@ if [ -z "${MKIMAGE}" ]; then
 	fi
 fi
 
+#hard code append imx6q-sabresd-ldo.dtb when we call mkimage to build uImage
+echo "cat arch/arm/boot/zImage_temp arch/arm/boot/dts/imx6q-sabresd-ldo.dtb > arch/arm/boot/zImage"
+cp arch/arm/boot/zImage arch/arm/boot/zImage_temp
+cat arch/arm/boot/zImage_temp arch/arm/boot/dts/imx6q-sabresd-ldo.dtb > arch/arm/boot/zImage
+rm arch/arm/boot/zImage_temp
+
 # Call "mkimage" to create U-Boot image
 ${MKIMAGE} "$@"
