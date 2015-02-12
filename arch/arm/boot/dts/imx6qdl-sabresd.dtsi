@@ -107,7 +107,7 @@
 		compatible = "gpio-keys";
 		power {
 			label = "Power Button";
-			gpios = <&gpio3 29 1>;
+			gpios = <&gpio7 12 1>;
 			linux,code = <116>; /* KEY_POWER */
 			gpio-key,wakeup;
 		};
