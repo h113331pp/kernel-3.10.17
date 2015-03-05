@@ -348,8 +348,9 @@ static void __init imx6q_init_machine(void)
 
 	of_platform_populate(NULL, of_default_bus_match_table,
 					imx6q_auxdata_lookup, parent);
-
+#ifdef CONFIG_FEC
 	imx6q_enet_init();
+#endif
 	imx_anatop_init();
 	imx6_pm_init();
 	imx6q_csi_mux_init();
