@@ -4870,7 +4870,7 @@ static void rtl_hw_start_8168bb(struct rtl8169_private *tp)
 	RTL_W16(CPlusCmd, RTL_R16(CPlusCmd) & ~R8168_CPCMD_QUIRK_MASK);
 
 	if (tp->dev->mtu <= ETH_DATA_LEN) {
-		rtl_tx_performance_tweak(pdev, (0x5 << MAX_READ_REQUEST_SHIFT) |
+		rtl_tx_performance_tweak(pdev, (0x2 << MAX_READ_REQUEST_SHIFT) |
 					 PCI_EXP_DEVCTL_NOSNOOP_EN);
 	}
 }
