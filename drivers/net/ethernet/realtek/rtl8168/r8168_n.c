@@ -72,13 +72,8 @@
 #include "rtl_eeprom.h"
 #include "rtltool.h"
 
-#define AIPS2_ARB_BASE_ADDR		0x02100000
-#define ATZ2_BASE_ADDR			AIPS2_ARB_BASE_ADDR
-#define AIPS2_OFF_BASE_ADDR		(ATZ2_BASE_ADDR + 0x80000)
-#define OCOTP_BASE_ADDR			(AIPS2_OFF_BASE_ADDR + 0x3C000)
-#define HW_OCOTP_MACn(n)        (0x00000620 + (n) * 0x10)
-#define PERIPBASE_VIRT			0xF2000000
-#define MX6_IO_ADDRESS(x) (void __force __iomem *)((x) + PERIPBASE_VIRT)
+#include <linux/of_address.h>
+#define OCOTP_MACn(n)	(0x00000620 + (n) * 0x10)
 
 #define MAX_READ_REQUEST_SHIFT	12
 static void rtl_tx_performance_tweak(struct pci_dev *pdev, u16 force)
@@ -16267,14 +16262,24 @@ rtl8168_get_mac_address(struct net_device *dev)
         u16 mac_addr[3];
 
         /* read MAC address from imx fuse */
+        struct device_node *ocotp_np;
+        void __iomem *base;
         unsigned int value;
         unsigned char temp_mac_addr[6];
-        value = readl(MX6_IO_ADDRESS(OCOTP_BASE_ADDR) + HW_OCOTP_MACn(0));
+        ocotp_np = of_find_compatible_node(NULL, NULL, "fsl,imx6q-ocotp");
+        if (!ocotp_np)
+            pr_warn("failed to find ocotp node\n");
+
+        base = of_iomap(ocotp_np, 0);
+        if (!base)
+            printk(KERN_ERR "failed to map ocotp\n");
+
+        value = readl_relaxed(base + OCOTP_MACn(0));
         temp_mac_addr[5] = value & 0xff;
         temp_mac_addr[4] = (value >> 8) & 0xff;
         temp_mac_addr[3] = (value >> 16) & 0xff;
         temp_mac_addr[2] = (value >> 24) & 0xff;
-        value = readl(MX6_IO_ADDRESS(OCOTP_BASE_ADDR) + HW_OCOTP_MACn(1));
+        value = readl_relaxed(base + OCOTP_MACn(1));
         temp_mac_addr[1] = value & 0xff;
         temp_mac_addr[0] = (value >> 8) & 0xff;
         /* re-arrange mac address */

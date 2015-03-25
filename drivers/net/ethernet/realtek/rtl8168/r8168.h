@@ -221,12 +221,12 @@ This is free software, and you are welcome to redistribute it under certain cond
 #define NODE_ADDRESS_SIZE 6
 
 /* write/read MMIO register */
-#define RTL_W8(reg, val8)   writeb ((val8), ioaddr + (reg))
-#define RTL_W16(reg, val16) writew ((val16), ioaddr + (reg))
-#define RTL_W32(reg, val32) writel ((val32), ioaddr + (reg))
-#define RTL_R8(reg)     readb (ioaddr + (reg))
-#define RTL_R16(reg)        readw (ioaddr + (reg))
-#define RTL_R32(reg)        ((unsigned long) readl (ioaddr + (reg)))
+#define RTL_W8(reg, val8)   iowrite8 ((val8), ioaddr + (reg))
+#define RTL_W16(reg, val16) iowrite16 ((val16), ioaddr + (reg))
+#define RTL_W32(reg, val32) iowrite32 ((val32), ioaddr + (reg))
+#define RTL_R8(reg)     ioread8 (ioaddr + (reg))
+#define RTL_R16(reg)        ioread16 (ioaddr + (reg))
+#define RTL_R32(reg)        ioread32 (ioaddr + (reg))
 
 #ifndef DMA_64BIT_MASK
 #define DMA_64BIT_MASK  0xffffffffffffffffULL
