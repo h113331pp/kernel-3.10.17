@@ -2108,7 +2108,8 @@ static int mmc_blk_alloc_part(struct mmc_card *card,
 {
 	char cap_str[10];
 	struct mmc_blk_data *part_md;
-
+	if (strncmp(subname, "boot1", 5) == 0)
+		default_ro = false;
 	part_md = mmc_blk_alloc_req(card, disk_to_dev(md->disk), size, default_ro,
 				    subname, area_type);
 	if (IS_ERR(part_md))
