@@ -1965,8 +1965,10 @@ static int mxcfb_option_setup(struct platform_device *pdev, struct fb_info *fbi)
 			continue;
 
 		if (!strncmp(opt, "dev=", 4)) {
-			memcpy(pdata->disp_dev, opt + 4, strlen(opt) - 4);
-			pdata->disp_dev[strlen(opt) - 4] = '\0';
+			/*memcpy(pdata->disp_dev, opt + 4, strlen(opt) - 4);
+			pdata->disp_dev[strlen(opt) - 4] = '\0';*/
+			strncpy(pdata->disp_dev, "vga", 3);
+			pdata->disp_dev[4] = '\0';
 		} else if (!strncmp(opt, "if=", 3)) {
 			if (!strncmp(opt+3, "RGB24", 5))
 				pdata->interface_pix_fmt = IPU_PIX_FMT_RGB24;
