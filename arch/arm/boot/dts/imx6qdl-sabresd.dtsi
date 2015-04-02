@@ -65,7 +65,7 @@
 			regulator-name = "usb_otg_vbus";
 			regulator-min-microvolt = <5000000>;
 			regulator-max-microvolt = <5000000>;
-			gpio = <&gpio3 22 0>;
+			
 			enable-active-high;
 		};
 
@@ -74,21 +74,21 @@
 			regulator-name = "usb_h1_vbus";
 			regulator-min-microvolt = <5000000>;
 			regulator-max-microvolt = <5000000>;
-			gpio = <&gpio1 29 0>;
+
 			enable-active-high;
 		};
 
 		reg_audio: wm8962_supply {
 			compatible = "regulator-fixed";
 			regulator-name = "wm8962-supply";
-			gpio = <&gpio4 10 0>;
+
 			enable-active-high;
 		};
 
 		reg_mipi_dsi_pwr_on: mipi_dsi_pwr_on {
 			compatible = "regulator-fixed";
 			regulator-name = "mipi_dsi_pwr_on";
-			gpio = <&gpio6 14 0>;
+			
 			enable-active-high;
 		};
 
@@ -111,18 +111,6 @@
 			linux,code = <116>; /* KEY_POWER */
 			gpio-key,wakeup;
 		};
-
-		volume-up {
-			label = "Volume Up";
-			gpios = <&gpio1 4 1>;
-			linux,code = <115>; /* KEY_VOLUMEUP */
-		};
-
-		volume-down {
-			label = "Volume Down";
-			gpios = <&gpio1 5 1>;
-			linux,code = <114>; /* KEY_VOLUMEDOWN */
-		};
 	};
 
 	sound {
@@ -142,7 +130,7 @@
 			"DMICDAT", "DMIC";
 		mux-int-port = <2>;
 		mux-ext-port = <3>;
-		hp-det-gpios = <&gpio7 8 1>;
+		hp-det-gpios = <&gpio7 8 0>;
 		mic-det-gpios = <&gpio1 9 1>;
 	};
 
